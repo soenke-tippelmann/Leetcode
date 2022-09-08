@@ -10,11 +10,10 @@ import org.scalatest.prop.TableFor2
 
 class BinaryTreePruningSpec extends AnyWordSpec with Matchers {
 
-  def T(v: Int, l: Option[TreeNode], r: Option[TreeNode]): Option[TreeNode] =
-    Some(TreeNode(v, l, r))
-  def R(v: Int, l: Option[TreeNode], r: Option[TreeNode]): TreeNode = T(v,l,r).get
-  val N: Option[TreeNode] = None
-  def L(v: Int): Option[TreeNode] = T(v, N, N)
+  val R = TreeNode.apply _
+  val T = Function.untupled( R.tupled andThen Some.apply _ )
+  val L = T(_, N, N)
+  val N = None
 
   "Binary Tree Pruning" should {
     "compute correctly" in {
