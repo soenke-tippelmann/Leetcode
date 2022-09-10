@@ -65,29 +65,32 @@ object Nqueens {
 
   // --------------------------------
 
+  // todo can I use symmetries to reduce tried solutions?
   def optimized(size: Int): List[List[String]] = {
     val iterateCounter = new Counter
 
     def iterate(queens: Set[(Int, Int)]): List[Set[(Int,Int)]] = {
       iterateCounter.inc()
-     // println("Iterate", queens)
+      println("Iterate", queens)
 
       if (size == queens.size) {
-      //  println("Done")
+        println("Done")
         List(queens)
       } else {
-        findCandidates(queens, x = queens.size)
+        val x = queens.size
+        findCandidates(queens, x)
+          .map((x, _))
           .map(queens + _)
           .flatMap(iterate)
       }
     }
 
-    def findCandidates(queens: Set[(Int, Int)], x: Int): List[(Int, Int)] = {
+    def findCandidates(queens: Set[(Int, Int)], x: Int): List[Int] = {
       val queensY = queens.map(_._2)
-      for {
-        y <- List.range(0, size).filterNot(queensY.contains)
-        if !intersectsQueen(queens, x, y)
-      } yield (x, y)
+      List
+        .range(0, size)
+        .filterNot(queensY.contains)
+        .filterNot(intersectsQueen(queens, x, _))
     }
 
     def intersectsQueen(queens: Set[(Int, Int)], x: Int, y: Int) =
