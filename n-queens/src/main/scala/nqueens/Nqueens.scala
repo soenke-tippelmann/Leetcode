@@ -69,25 +69,27 @@ object Nqueens {
   def optimized(size: Int): List[List[String]] = {
     val iterateCounter = new Counter
 
-    def iterate(queens: Set[(Int, Int)]): List[Set[(Int,Int)]] = {
+    def iterate(queens: Set[(Int, Int)]): Set[Set[(Int,Int)]] = {
       iterateCounter.inc()
-      println("Iterate", queens)
+      //println("Iterate", queens)
 
       if (size == queens.size) {
-        println("Done")
-        List(queens)
+        //println("Done")
+        val queensInverted = queens.map{case (x,y)=>(x,size-1-y)}
+        Set(queens, queensInverted)
       } else {
         val x = queens.size
         findCandidates(queens, x)
+          .filterNot(y => queens.size == 0 && y >= (size + 1) / 2)
           .map((x, _))
           .map(queens + _)
           .flatMap(iterate)
       }
     }
 
-    def findCandidates(queens: Set[(Int, Int)], x: Int): List[Int] = {
+    def findCandidates(queens: Set[(Int, Int)], x: Int): Set[Int] = {
       val queensY = queens.map(_._2)
-      List
+      Set
         .range(0, size)
         .filterNot(queensY.contains)
         .filterNot(intersectsQueen(queens, x, _))
@@ -100,7 +102,7 @@ object Nqueens {
       }
 
     //main call
-    val result = iterate(Set.empty)
+    val result = iterate(Set.empty).toList
     println(s"iterateCounter (optimized) ${iterateCounter.get}")
     setToStringRep(size, result)
   }
