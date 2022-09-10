@@ -68,29 +68,24 @@ object Nqueens {
   def optimized(size: Int): List[List[String]] = {
     val iterateCounter = new Counter
 
-    def iterate(queens: Set[(Int, Int)], lastQueen: (Int, Int)): List[Set[(Int,Int)]] = {
+    def iterate(queens: Set[(Int, Int)]): List[Set[(Int,Int)]] = {
       iterateCounter.inc()
      // println("Iterate", queens)
 
-      val remainingQueens = size - queens.size
-
-      if (remainingQueens == 0) {
+      if (size == queens.size) {
       //  println("Done")
         List(queens)
       } else {
-        findFreeSpots(queens)
-          .filter(_._1 > lastQueen._1)
-          .filter(spot => (size - spot._1) >= remainingQueens)
-          .flatMap(spot => iterate(queens + spot, spot))
+        findCandidates(queens, x = queens.size)
+          .map(queens + _)
+          .flatMap(iterate)
       }
     }
 
-    def findFreeSpots(queens: Set[(Int, Int)]): List[(Int, Int)] = {
-      val queensX = queens.map(_._1)
+    def findCandidates(queens: Set[(Int, Int)], x: Int): List[(Int, Int)] = {
       val queensY = queens.map(_._2)
       for {
-        x <- List.range(0,size).filterNot(queensX.contains)
-        y <- List.range(0,size).filterNot(queensY.contains)
+        y <- List.range(0, size).filterNot(queensY.contains)
         if !intersectsQueen(queens, x, y)
       } yield (x, y)
     }
@@ -98,11 +93,11 @@ object Nqueens {
     def intersectsQueen(queens: Set[(Int, Int)], x: Int, y: Int) =
       queens.exists {
         case (qx, qy) =>
-          x == qx || y == qy || (qx - x) == (qy - y) || -(qx - x) == (qy - y)
+          (qx - x) == (qy - y) || -(qx - x) == (qy - y)
       }
 
     //main call
-    val result = iterate(Set.empty, (-1, -1))
+    val result = iterate(Set.empty)
     println(s"iterateCounter (optimized) ${iterateCounter.get}")
     setToStringRep(size, result)
   }
