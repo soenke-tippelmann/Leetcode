@@ -68,23 +68,20 @@ object Nqueens {
   def optimized(size: Int): List[List[String]] = {
     val iterateCounter = new Counter
 
-    val visited: mSet[Set[(Int,Int)]] = mSet.empty
-
-    def iterate(queens: Set[(Int, Int)]): List[Set[(Int,Int)]] = {
+    def iterate(queens: Set[(Int, Int)], lastQueen: (Int, Int)): List[Set[(Int,Int)]] = {
       iterateCounter.inc()
+     // println("Iterate", queens)
 
-      if (visited.contains(queens)) {
-        List.empty
+      val remainingQueens = size - queens.size
+
+      if (remainingQueens == 0) {
+      //  println("Done")
+        List(queens)
       } else {
-        visited.update(queens, true)
-
-        if (queens.size == size) {
-          List(queens)
-        } else {
-          findFreeSpots(queens)
-            .map(queens + _)
-            .flatMap(iterate)
-        }
+        findFreeSpots(queens)
+          .filter(_._1 > lastQueen._1)
+          .filter(spot => (size - spot._1) >= remainingQueens)
+          .flatMap(spot => iterate(queens + spot, spot))
       }
     }
 
@@ -105,7 +102,7 @@ object Nqueens {
       }
 
     //main call
-    val result = iterate(Set.empty)
+    val result = iterate(Set.empty, (-1, -1))
     println(s"iterateCounter (optimized) ${iterateCounter.get}")
     setToStringRep(size, result)
   }

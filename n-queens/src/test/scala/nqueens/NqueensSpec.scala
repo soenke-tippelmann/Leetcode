@@ -30,7 +30,16 @@ class NqueensSpec extends AnyWordSpec with Matchers {
       forAll ( Table("size", 1, 2, 3, 4, 5, 6) ) {
         (size: Int) => {
           println(s"\nRunning $size")
-          Nqueens.run(size) should contain theSameElementsAs Nqueens.naive(size)
+          Nqueens.optimized(size) should contain theSameElementsAs Nqueens.naive(size)
+        }
+      }
+
+      forAll ( Table("size", 7, 8, 9, 10) ) {
+        (size: Int) => {
+          println(s"\nRunning $size")
+          //Nqueens.naive(size)
+          println("Optimized")
+          Nqueens.optimized(size)
         }
       }
     }
