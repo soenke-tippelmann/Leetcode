@@ -55,5 +55,25 @@ object TrappingWater {
         }
     }
   }
-}
 
+  def run2(input: List[Int]): Int = {
+    val arr = input.toArray
+    val rp = arr.size - 1
+    iterate3(arr, 0, 0, rp, 0, 0)
+  }
+
+  def iterate3(input: Array[Int], leftPointer: Int, leftHeight: Int, rightPointer: Int, rightHeight: Int, count: Int): Int = {
+
+    println(input, leftPointer, leftHeight, rightPointer, rightHeight, count)
+
+    if (leftPointer > rightPointer) {
+      count
+    } else {
+      if( leftHeight < rightHeight ) {
+        iterate3(input, leftPointer + 1, Math.max(leftHeight, input(leftPointer)), rightPointer, rightHeight, count + Math.max(0, leftHeight - input(leftPointer)))
+      } else {
+        iterate3(input, leftPointer, leftHeight, rightPointer - 1, Math.max(rightHeight, input(rightPointer)), count + Math.max(0, rightHeight - input(rightPointer)))
+      }
+    }
+  }
+}
