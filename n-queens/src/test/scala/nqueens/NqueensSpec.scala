@@ -23,7 +23,14 @@ class NqueensSpec extends AnyWordSpec with Matchers {
       forAll (values) {
         (input: Int, result: List[List[String]]) => {
           println(s"\nRunning $input, expecting $result")
-          Nqueens.run(input) should contain theSameElementsAs result
+          Nqueens.naive(input) should contain theSameElementsAs result
+        }
+      }
+
+      forAll ( Table("size", 1, 2, 3, 4, 5, 6) ) {
+        (size: Int) => {
+          println(s"\nRunning $size")
+          Nqueens.run(size) should contain theSameElementsAs Nqueens.naive(size)
         }
       }
     }
