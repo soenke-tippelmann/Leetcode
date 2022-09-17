@@ -26,7 +26,10 @@ class ReverseIntegerSpec extends AnyWordSpec with Matchers {
           // test cases from the task definition
           (123, 321),
           (-123, -321),
-          (120, 21)
+          (120, 21),
+          // discussion
+          (2147483641, 1463847412),
+          (2147483643, 0),
         )
 
       forAll (values) {
