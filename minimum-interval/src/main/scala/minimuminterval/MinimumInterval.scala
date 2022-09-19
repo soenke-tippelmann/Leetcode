@@ -39,19 +39,25 @@ object MinimumInterval {
 
   private def processInterval(tree: TreeMap[Int, Int], interval: Interval): Unit = {
     tree.update(interval.right + 1, findValue(tree, interval.right + 1))
+    println("  /  ", tree, interval)
 
     val maxBefore = findValue(tree, interval.left)
     if(maxBefore > interval.size || maxBefore == -1) {
       tree.update(interval.left, interval.size)
     }
+    println("  /  ", tree, interval)
 
+    println("range: ", tree.range(interval.left + 1, interval.right + 1))
     tree
       .range(interval.left + 1, interval.right + 1)
       .foldLeft(findValue(tree, interval.left))(
         (prevValue, entry) => updatePosition(tree, interval, entry._1, entry._2, prevValue))
+
+    println("  ->", tree)
   }
 
   private def updatePosition(tree: TreeMap[Int, Int], interval: Interval, position: Int, value: Int, prevValue: Int): Int = {
+    val res =
     if (value <= interval.size && value != -1) {
       value
     } else if (prevValue < interval.size && prevValue != -1) {
@@ -61,6 +67,10 @@ object MinimumInterval {
       tree.remove(position)
       prevValue
     }
+
+    println("  /  ", tree, position, value, prevValue)
+
+    res
   }
 
 }
