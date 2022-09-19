@@ -19,10 +19,19 @@ class JumpGameSpec extends AnyWordSpec with Matchers {
           (A(3,2,1,0,4), false)
         )
 
+      println("Running naive version")
       forAll (values) {
         (input: Array[Int], result: Boolean) => {
           println(s"\nRunning [${input.mkString(",")}] expecting $result")
-          JumpGame.run(input) shouldBe result
+          JumpGame.naive(input) shouldBe result
+        }
+      }
+
+      println("Running optimized version")
+      forAll (values) {
+        (input: Array[Int], result: Boolean) => {
+          println(s"\nRunning [${input.mkString(",")}] expecting $result")
+          JumpGame.optimized(input) shouldBe result
         }
       }
     }

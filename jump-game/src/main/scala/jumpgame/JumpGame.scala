@@ -1,14 +1,36 @@
 package jumpgame
 
-import scala.annotation.tailrec
+import scala.collection.mutable.Map
 
 object JumpGame {
-  def run(input: Array[Int]): Boolean = iterate(input, 0)
+  def naive(input: Array[Int]): Boolean = {
 
-  private def iterate(input: Array[Int], position: Int): Boolean = {
-    if(position >= input.size) false
-    else if (position == input.size - 1) true
-    else List.range(1, input(position) + 1).exists(jumpSize => iterate(input, position + jumpSize))
+    def iterate(position: Int): Boolean = {
+      if(position >= input.size) false
+      else if (position == input.size - 1) true
+      else List.range(1, input(position) + 1).exists(jumpSize => iterate(position + jumpSize))
+    }
+
+    iterate(0)
+  }
+
+  // ----------------------------
+
+  def optimized(input: Array[Int]): Boolean = {
+
+    val cache: Map[Int, Boolean] = Map.empty
+
+    def cachedIterate(position: Int): Boolean = {
+      cache.getOrElseUpdate(position, iterate(position))
+    }
+
+    def iterate(position: Int): Boolean = {
+      if(position >= input.size) false
+      else if (position == input.size - 1) true
+      else List.range(1, input(position) + 1).exists(jumpSize => cachedIterate(position + jumpSize))
+    }
+
+    cachedIterate(0)
   }
 }
 
