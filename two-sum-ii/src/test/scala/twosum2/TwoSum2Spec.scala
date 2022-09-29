@@ -14,6 +14,9 @@ class TwoSum2Spec extends AnyWordSpec with Matchers {
       val values =
         Table(
           ("input", "target", "result"),
+          (A(-1000,-800,-700,-50,1,2,3,4,5,6,50,700,800,1000,2000), 5, (5,8)),
+          (A(-1000,-800,-700,-50,1,2,3,4,5,6,50), 5, (5,8)),
+          (A(1,2,3,4,5,6,50,700,800,1000,2000), 5, (1,4)),
           // test cases from the task definition
           (A(2,7,11,15), 9, (1,2)),
           (A(2,3,4), 6, (1,3)),
