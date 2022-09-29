@@ -24,7 +24,7 @@ class TwoSum2Spec extends AnyWordSpec with Matchers {
       forAll (values) {
         (numbers: Array[Int], k: Int, result: Array[Int]) => {
           println(s"\nRunning ${toStr(numbers)} with k=$k expecting ${toStr(result)}")
-          TopK.topK(numbers, k) should contain theSameElementsAs result
+          TopK.naive(numbers, k) should contain theSameElementsAs result
         }
       }
     }
