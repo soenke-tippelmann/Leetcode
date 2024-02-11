@@ -15,5 +15,7 @@ object MedianFinder {
   def naiveQuickFind = new MedianFinderNaiveQuickFind()
 
   def optimized = new MedianFinderOptimized()
+
+  def bounded = new MedianFinderBounded()
 }
 
